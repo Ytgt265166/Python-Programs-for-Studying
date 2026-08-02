@@ -1,7 +1,17 @@
 import random
 
 def guess_number():
-    range = 300
+    upper_valid =False
+    while not upper_valid:
+        try:
+            range = int(input("Enter the upper limit for the guessing range:"))
+            if range > 0:
+                upper_valid = True
+            else:
+                print("Please enter a positive integer.")
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
+
     number_to_guess = random.randint(1, range)
     attempts = 0
     guessed = False
@@ -22,7 +32,10 @@ def guess_number():
                 print("Too high! Try again.")
             else:
                 guessed = True
-                print(f"Congratulations! You've guessed the number {number_to_guess} in {attempts} attempts.")
+                if attempts == 1:
+                    print(f"Unbelievable! You've guessed the number {number_to_guess} in just 1 attempt!")
+                else:
+                    print(f"Congratulations! You've guessed the number {number_to_guess} in {attempts} attempts.")
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
 
