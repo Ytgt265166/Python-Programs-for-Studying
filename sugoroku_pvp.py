@@ -1,6 +1,7 @@
 import random
 import tkinter as tk
 
+
 class Player:
     def __init__(self, player_id):
         self.player_id = player_id
@@ -8,7 +9,9 @@ class Player:
         self.name = f"Player {player_id}"
 
     def move(self, steps):
-        self.position += steps
+        for _ in range(steps):
+            self.position += 1
+
         if self.position > 50:
             self.position = 50
 
@@ -29,15 +32,20 @@ def dice():
 
 #リセットボタンをクリックされたとき
 def reset():
+    #ボックスの中身を消去
     Box.delete(0, 'end')
     Box_p1.delete(0, 'end')
     Box_p2.delete(0, 'end')
     Box_turn.delete(0, 'end')
+
+    #プレイヤーの位置をリセット
     player1.position = 0
     player2.position = 0
     Box_p1.insert(0, "P1:" + str(player1.get_position()))
     Box_p2.insert(0, "P2:" + str(player2.get_position()))
-    global goaled, current_player
+    Box_turn.insert(0, "Player 1's turn")
+    #グローバル変数をリセット
+    
     goaled = False
     current_player = player1
 
@@ -47,7 +55,8 @@ def buttonClicked():
 
     if goaled:
         return  # ゲームが終了している場合は何もしない
-       
+
+    #現在のプレイヤーのボックスを取得   
     if current_player == player1:
         current_box = Box_p1
     else:
@@ -60,6 +69,7 @@ def buttonClicked():
     Box.delete(0, 'end')
     result=dice()
     Box.insert(0, result)
+    
     current_player.move(result)
     current_box.insert(0, f"P{current_player.player_id}:{current_player.get_position()}")
     if current_player.get_position() >= 50:
