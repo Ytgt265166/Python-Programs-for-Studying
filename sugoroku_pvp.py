@@ -23,15 +23,14 @@ player2 = Player(2)
 goaled = False
 current_player = player1  # 最初のプレイヤーをplayer1に設定
 
-#print(player1.player_id)
-#print(player2.player_id)
-
+#さいころを振る関数
 def dice():
     return random.randint(1, 6)    
         
 
 #リセットボタンをクリックされたとき
 def reset():
+    global current_player, goaled
     #ボックスの中身を消去
     Box.delete(0, 'end')
     Box_p1.delete(0, 'end')
@@ -44,17 +43,17 @@ def reset():
     Box_p1.insert(0, "P1:" + str(player1.get_position()))
     Box_p2.insert(0, "P2:" + str(player2.get_position()))
     Box_turn.insert(0, "Player 1's turn")
-    #グローバル変数をリセット
-    
+
+    #変数をリセット
     goaled = False
     current_player = player1
 
 #赤いボタンをクリックされたとき    
 def buttonClicked():
-    global current_player,goaled
+    global current_player , goaled
 
     if goaled:
-        return  # ゲームが終了している場合は何もしない
+        return  #ゲームが終了している場合は何もしない
 
     #現在のプレイヤーのボックスを取得   
     if current_player == player1:
@@ -62,16 +61,18 @@ def buttonClicked():
     else:
         current_box = Box_p2
 
-    current_box.delete(0, 'end')
+    #ボックスの中身を消去
     Box_turn.delete(0, 'end')
-    
     current_box.delete(0, 'end')
     Box.delete(0, 'end')
     result=dice()
     Box.insert(0, result)
-    
+
+    #現在のプレイヤーの位置を更新
     current_player.move(result)
     current_box.insert(0, f"P{current_player.player_id}:{current_player.get_position()}")
+
+    #現在のプレイヤーがゴールに到達したかどうかを確認
     if current_player.get_position() >= 50:
             Box_turn.delete(0, 'end')
             Box_turn.insert(0, f"{current_player.name} wins!")
@@ -91,9 +92,6 @@ root.title("Two Player Sugoroku Game")
 root.geometry("400x300")
 root.resizable(True, True)
 
-
-
-
 #さいころの目が表示されるボックス
 Box = tk.Entry(width=10, fg="#000000", justify="center", font=("Helvetica", 30))
 Box.place(x=150, y=5)
@@ -112,9 +110,10 @@ Box_p2.insert(0, "P2:" + str(player2.get_position()))
 button_dice = tk.Button(text='Roll Dice',width = 11, bg='#f9c74f', command=buttonClicked)
 button_dice.place(x=170, y=200)
 
+#現在どちらのプレイヤーのターンかが表示されるボックス
 Box_turn = tk.Entry(width=20, fg="#000000", justify="center", font=("Helvetica", 20))
 Box_turn.place(x=100, y=150)
-Box_turn.insert(0, f"{current_player.name}'s turn")
+Box_turn.insert(0, "Player 1's turn")
 
 #リセットボタン
 button2 = tk.Button(text='RESET', width=11, bg='#3289a8', command=reset)
